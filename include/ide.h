@@ -1,1 +1,1 @@
-../../u-boot/include/ide.h
+../../../u-boot/omap4/include/ide.h

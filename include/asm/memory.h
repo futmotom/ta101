@@ -1,1 +1,1 @@
-../../../u-boot/include/asm/memory.h
+../../../../u-boot/omap4/include/asm-arm/memory.h

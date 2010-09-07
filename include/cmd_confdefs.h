@@ -1,1 +1,1 @@
-../../u-boot/include/cmd_confdefs.h
+../../../u-boot/omap4/include/cmd_confdefs.h

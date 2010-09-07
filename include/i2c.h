@@ -1,1 +1,1 @@
-../../u-boot/include/i2c.h
+../../../u-boot/omap4/include/i2c.h

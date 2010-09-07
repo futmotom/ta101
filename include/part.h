@@ -1,1 +1,1 @@
-../../u-boot/include/part.h
+../../../u-boot/omap4/include/part.h

@@ -1,1 +1,1 @@
-../../../u-boot/include/asm-arm/byteorder.h
+../../../../u-boot/omap4/include/asm-arm/byteorder.h

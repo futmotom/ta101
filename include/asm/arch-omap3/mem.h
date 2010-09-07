@@ -1,1 +1,1 @@
-../../../../u-boot/include/asm-arm/arch-omap3/mem.h
+../../../../../u-boot/omap4/include/asm-arm/arch-omap3/mem.h

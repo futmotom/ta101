@@ -1,1 +1,1 @@
-../../../u-boot/include/asm/mach-types.h
+../../../../u-boot/omap4/include/asm-arm/mach-types.h

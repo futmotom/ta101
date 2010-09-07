@@ -1,1 +1,1 @@
-../../u-boot/include/malloc.h
+../../../u-boot/omap4/include/malloc.h

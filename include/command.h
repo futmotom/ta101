@@ -1,1 +1,1 @@
-../../u-boot/include/command.h
+../../../u-boot/omap4/include/command.h

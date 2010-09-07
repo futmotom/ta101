@@ -1,1 +1,1 @@
-../../u-boot/include/environment.h
+../../../u-boot/omap4/include/environment.h

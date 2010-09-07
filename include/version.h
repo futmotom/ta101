@@ -1,1 +1,1 @@
-../../u-boot/include/version.h
+../../../u-boot/omap4/include/version.h

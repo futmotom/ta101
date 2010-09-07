@@ -1,1 +1,1 @@
-../../../u-boot/include/linux/time.h
+../../../../u-boot/omap4/include/linux/time.h

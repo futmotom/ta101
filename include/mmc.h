@@ -1,1 +1,1 @@
-../../u-boot/include/mmc.h
+../../../u-boot/omap4/include/mmc.h
