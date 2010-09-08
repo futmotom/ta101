@@ -167,6 +167,11 @@ omap4430sdp_config :    unconfig
 		  echo "MPU at 600MHz revision.." ; \
 		}
 
+newera4430adbes1_config :    unconfig
+	@./mkconfig $(@:_config=) arm omap4 newera4430adbes1
+	echo "/* Generarated file. Do not edit */" >./include/config.h
+	echo "#include <configs/newera4430adbes1.h>" >>./include/config.h
+
 omap3430labrador_config :    unconfig
 	@./mkconfig $(@:_config=) arm omap3 omap3430labrador
 
