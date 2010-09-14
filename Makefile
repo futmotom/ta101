@@ -173,7 +173,7 @@ newera4430adbes1_config :    unconfig
 	echo "#include <configs/newera4430adbes1.h>" >>./include/config.h
 
 newera4430adbes2_config :    unconfig
-	@./mkconfig $(@:_config=) arm omap4 newera4430adbes1
+	@./mkconfig $(@:_config=) arm omap4 newera4430adbes2
 	echo "/* Generarated file. Do not edit */" >./include/config.h
 	echo "#include <configs/newera4430adbes2.h>" >>./include/config.h
 
