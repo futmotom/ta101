@@ -39,7 +39,7 @@
 #define CONFIG_OMAP44XX          1    /* which is a 34XX */
 #define CONFIG_OMAP4430          1    /* which is in a 3430 */
 #define CONFIG_4430SDP           1    /* working with SDP */
-#define CONFIG_NEWERA4430ES1     1    /* for the ES1 target */
+#define CONFIG_NEWERA4430ES2     1    /* for the ES2 target */
 #define CONFIG_MPU_600           1    /* which uses the 600MHz MPU */
 
 #define CORE_190MHZ		1
@@ -67,6 +67,10 @@
 #define CFG_4430SDRAM_DDR        1
 
 #ifdef CFG_PRINTF
+//#define CFG_DDR_TEST 100000
+#ifdef CFG_DDR_TEST
+//#define CFG_DDR_TEST_VERBOSE 1
+#endif
 
 #define CFG_NS16550
 #define CFG_NS16550_SERIAL
