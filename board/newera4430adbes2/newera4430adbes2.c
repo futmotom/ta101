@@ -703,7 +703,7 @@ int dram_init(void)
 	MV(CP(GPMC_AD7) , ( PTU | IEN | OFF_EN | OFF_PD | OFF_IN | M1))  /* sdmmc2_dat7 */ \
 	MV(CP(GPMC_AD8) , ( M3 ))  /* gpio_32, proximity sensor out to OMAP, not connected */ \
 	MV(CP(GPMC_AD9) , ( M3 ))  /* gpio_33, accelerometers U14 INT to OMAP, not connected */ \
-	MV(CP(GPMC_AD10) , ( M3 )) /* gpio_34, digital compass DRDY, not connected */ \
+	MV(CP(GPMC_AD10) , ( OFF_EN | OFF_OUT | OFF_OUT_PTU | M3 )) /* gpio_34, Touch Panel B reset */ \
 	MV(CP(GPMC_AD11) , ( M3 )) /* gpio_35, MDM_PWRON control signal to PCIE mini J3, not connected */ \
 	MV(CP(GPMC_AD12) , ( M3 )) /* gpio_36, MDM_RST control signal to PCIE mini J3, not connected */ \
 	MV(CP(GPMC_AD13) , ( M3 )) /* gpio_37, MDM_RST drive by MDM, not connected */ \
@@ -736,19 +736,19 @@ int dram_init(void)
 	MV(CP(C2C_DATA12) , ( M7))  /* unused */ \
 	MV(CP(C2C_DATA13) , ( M3))  /* gpio_102, Disp0_RSTX */ \
 	MV(CP(C2C_DATA14) , ( PTD | IEN | OFF_EN | OFF_PD | OFF_IN | M3))  /* gpio_103, SMT_INT edge */ \
-	MV(CP(C2C_DATA15) , ( M3))  /* gpio_104, OLED DISP1 ON, not connected */ \
+	MV(CP(C2C_DATA15) , ( OFF_EN | OFF_OUT | OFF_OUT_PTU | M3))  /* gpio_104, OLED DISP1 ON, not connected */ \
 	MV(CP(HDMI_HPD) , ( M0))  /* hdmi_hpd */ \
 	MV(CP(HDMI_CEC) , ( M0))  /* hdmi_cec */ \
 	MV(CP(HDMI_DDC_SCL) , ( PTU | M0))  /* hdmi_ddc_scl */ \
 	MV(CP(HDMI_DDC_SDA) , ( PTU | IEN | M0))  /* hdmi_ddc_sda */ \
 	MV(CP(CSI21_DX0) , ( PTD | IEN | OFF_EN | OFF_PD | OFF_IN | M3))  /* gpi_67, reserved for hinge detection */ \
-	MV(CP(CSI21_DY0) , ( PTD | IEN | OFF_EN | OFF_PD | OFF_IN | M3))  /* gpi_68, reserved for hinge detection */ \
-	MV(CP(CSI21_DX1) , ( PTD | IEN | OFF_EN | OFF_PD | OFF_IN | M3))  /* gpi_69, reserved for hinge detection */ \
-	MV(CP(CSI21_DY1) , ( M7))  /* unused, reserved,tie to R5465 (DNI) which has another end GND */ \
-	MV(CP(CSI21_DX2) , ( PTD | IEN | OFF_EN | OFF_PD | OFF_IN | M3))  /* gpi_71, TOUCH1 A ATTN */ \
-	MV(CP(CSI21_DY2) , ( PTD | IEN | OFF_EN | OFF_PD | OFF_IN | M3))  /* gpi_72, TOUCH1 B ATTN */ \
-	MV(CP(CSI21_DX3) , ( M7))  /* unused */ \
-	MV(CP(CSI21_DY3) , ( M3))  /* gpi_74, Touch Panel B reset */ \
+	MV(CP(CSI21_DY0) , ( PTU | IEN | OFF_EN | OFF_PD | OFF_IN | M3))  /* gpi_68, reserved for hinge detection */ \
+	MV(CP(CSI21_DX1) , ( PTU | IEN | OFF_EN | OFF_PD | OFF_IN | M3))  /* gpi_69, reserved for hinge detection */ \
+	MV(CP(CSI21_DY1) , ( PTU | IEN | OFF_EN | OFF_PU | OFF_IN | M3))  /* gpi_70, TOUCH A MISO detection */ \
+	MV(CP(CSI21_DX2) , ( PTU | IEN | OFF_EN | OFF_PU | OFF_IN | M3))  /* gpi_71, TOUCH1 A ATTN */ \
+	MV(CP(CSI21_DY2) , ( PTU | IEN | OFF_EN | OFF_PU | OFF_IN | M3))  /* gpi_72, TOUCH1 B ATTN */ \
+	MV(CP(CSI21_DX3) , ( PTU | IEN | OFF_EN | OFF_PU | OFF_IN | M3))  /* gpi_73, TOUCH B MISO detection */ \
+	MV(CP(CSI21_DY3) , ( M7))  /* gpi_74, unused */ \
 	MV(CP(CSI21_DX4) , ( PTD | IEN | OFF_EN | OFF_PD | OFF_IN | M3))  /* gpi_75, from hall effect sensor U6908 output */ \
 	MV(CP(CSI21_DY4) , ( PTD | IEN | OFF_EN | OFF_PD | OFF_IN | M3))  /* gpi_76, from hall effect sensor U6909 output */ \
 	MV(CP(CSI22_DX0) , ( IEN | M0))  /* csi22_dx0 */ \
@@ -837,7 +837,7 @@ int dram_init(void)
 	MV(CP(MCSPI4_CS0) , ( IEN | OFF_EN | OFF_PD | OFF_IN | M7))  /* safe_mode, mcspi4_cs0 */ \
 	MV(CP(UART4_RX) , ( IEN | M0))  /* uart4_rx */ \
 	MV(CP(UART4_TX) , ( M0))  /* uart4_tx */ \
-	MV(CP(USBB2_ULPITLL_CLK) , (M3)) /* gpio_157, Touch Panel A reset */ \
+	MV(CP(USBB2_ULPITLL_CLK) , ( OFF_EN | OFF_OUT | OFF_OUT_PTU | M3)) /* gpio_157, Touch Panel A reset */ \
 	MV(CP(USBB2_ULPITLL_STP) , ( IEN | M5))  /* dispc2_data23 */ \
 	MV(CP(USBB2_ULPITLL_DIR) , ( IEN | M5))  /* dispc2_data22 */ \
 	MV(CP(USBB2_ULPITLL_NXT) , ( IEN | M5))  /* dispc2_data21 */ \
@@ -854,8 +854,8 @@ int dram_init(void)
 	MV(CP(UNIPRO_TX0) , (OFF_EN | OFF_PD | OFF_IN | M1))  /* kpd_col0 */ \
 	MV(CP(UNIPRO_TY0) , (OFF_EN | OFF_PD | OFF_IN | M1))  /* kpd_col1 */ \
 	MV(CP(UNIPRO_TX1) , (OFF_EN | OFF_PD | OFF_IN | M1))  /* kpd_col2 */ \
-	MV(CP(UNIPRO_TY1) , (PTU | IEN | OFF_EN | OFF_PD | OFF_IN | M3)) /* gpio_174, SPI4_CS_SEL_TOUCH2 gate */ \
-	MV(CP(UNIPRO_TX2) , (PTU | IEN | OFF_EN | OFF_PD | OFF_IN | M3)) /*  'gpio_0, SPI4_CS_SEL_DISP2 gate' */ \
+	MV(CP(UNIPRO_TY1) , (OFF_EN | OFF_OUT | OFF_OUT_PTU | M3)) /* gpio_174, SPI4_CS_SEL_TOUCH2 gate */ \
+	MV(CP(UNIPRO_TX2) , (OFF_EN | OFF_OUT | OFF_OUT_PTU | M3)) /*  'gpio_0, SPI4_CS_SEL_DISP2 gate' */ \
 	MV(CP(UNIPRO_TY2) , (M7)) /* unused, reserved for EL_ON_2 */ \
 	MV(CP(UNIPRO_RX0) , (PTU | IEN | OFF_EN | OFF_PD | OFF_IN | M1)) /* kpd_row0 */ \
 	MV(CP(UNIPRO_RY0) , (PTU | IEN | OFF_EN | OFF_PD | OFF_IN | M1)) /* kpd_row1 */ \
@@ -873,9 +873,9 @@ int dram_init(void)
 	MV(CP(SYS_BOOT0) , (M0)) /* SYS BOOT SWITCH */ \
 	MV(CP(SYS_BOOT1) , (M0)) /* SYS BOOT SWITCH */ \
 	MV(CP(SYS_BOOT2) , (M0)) /* SYS BOOT SWITCH */ \
-	MV(CP(SYS_BOOT3) , (M3)) /* gpio_187, GPIO187 Output to AB5000 ONSWa input */ \
+	MV(CP(SYS_BOOT3) , (M0)) /* SYS BOOT SWITCH */ \
 	MV(CP(SYS_BOOT4) , (M0)) /* SYS BOOT SWITCH */ \
-	MV(CP(SYS_BOOT5) , (M3)) /* gpio_189, GPIO_189 Reset output from AB5000 */ \
+	MV(CP(SYS_BOOT5) , (M0)) /* SYS BOOT SWITCH */ \
 	MV(CP(DPM_EMU0) , ( PTD | OFF_EN | OFF_PD | OFF_OUT_PTD | M0))  /* dpm_emu0, MIPI debug */ \
 	MV(CP(DPM_EMU1) , ( M3))  /* gpio_12, J33_OLED1_RESET */ \
 	MV(CP(DPM_EMU2) , ( M3))  /* gpio_13, J30_OLED2_RESET */ \
@@ -919,16 +919,12 @@ int dram_init(void)
 	MV1(WK(PAD1_SYS_PWRON_RESET) , ( PTD | IEN | OFF_EN | OFF_PD | OFF_IN | M3))  /* gpio_wk29, PMIC INT */ \
 	MV1(WK(PAD0_SYS_BOOT6) , ( PTD | IEN | OFF_EN | OFF_PD | OFF_IN | M3))  /* gpio_wk9, MDM_RST_IN */ \
 	MV1(WK(PAD1_SYS_BOOT7) , ( M0))  /* SYS BOOT SWITCH */ \
-	MV1(WK(PAD1_FREF_CLK3_REQ),     (M3)) /* gpio_wk30 */ \
-	MV1(WK(PAD1_FREF_CLK4_REQ),     (M3)) /* gpio_wk7 */ \
-	MV1(WK(PAD0_FREF_CLK4_OUT),     (M3)) /* gpio_wk8 */ \
-	MV1(WK(PAD0_FREF_CLK4_OUT),     (M0_SAFE)) /* unused, don't support M7 in manual */ \
 //	MV1(WK(PAD0_JTAG_NTRST) , ( IEN | M0))  /* jtag_ntrst */ \
 	MV1(WK(PAD1_JTAG_TCK) , ( IEN | M0))  /* jtag_tck */ \
 	MV1(WK(PAD0_JTAG_RTCK) , ( M0))  /* jtag_rtck */ \
 	MV1(WK(PAD1_JTAG_TMS_TMSC) , ( IEN | M0))  /* jtag_tms_tmsc */ \
 	MV1(WK(PAD0_JTAG_TDI) , ( IEN | M0))  /* jtag_tdi */ \
-	MV1(WK(PAD1_JTAG_TDO) , ( M0))  /* jtag_tdo */ 
+	MV1(WK(PAD1_JTAG_TDO) , ( M0))  /* jtag_tdo */
  
 #define MUX_DEFAULT_OMAP4_ALL() \
   	MV(CP(GPMC_AD0),	(PTU | IEN | OFF_EN | OFF_PD | OFF_IN | M1)) /* sdmmc2_dat0 */ \
