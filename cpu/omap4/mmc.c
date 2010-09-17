@@ -444,11 +444,11 @@ unsigned char omap_mmc_read_sect(unsigned int start_sec,
 	    (num_bytes + (MMCSD_SECTOR_SIZE - 1)) / MMCSD_SECTOR_SIZE;
 	unsigned int sec_inc_val;
 
-	if (num_sec_val == 0) {
-		printf("mmc read: Invalid size\n");
-		return 1;
-	}
 	if (mmc_c->mode == SECTOR_MODE) {
+		if (num_sec_val == 0) {
+			printf("mmc read: Invalid size\n");
+			return 1;
+		}
 		argument = start_sec;
 		sec_inc_val = 1;
 	} else {
