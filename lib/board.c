@@ -80,11 +80,9 @@ init_fnc_t *init_sequence[] = {
 	cpu_init,		/* basic cpu dependent setup */
 	board_init,		/* basic board dependent setup */
 #ifdef CFG_PRINTF
-#ifdef CONFIG_NEWERA4430ES2
 #ifndef CFG_DDR_TEST
  	serial_init,		/* serial communications setup */
 #endif /* CFG_DDR_TEST */
-#endif /* CONFIG_NEWERA4430ES2 */
 	print_info,
 #endif
    	//nand_init,		/* board specific nand init */
