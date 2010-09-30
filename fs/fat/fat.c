@@ -86,6 +86,8 @@ int strcmp(const char * cs,const char * ct)
 
         return __res;
 }
+
+#ifndef CFG_DDR_TEST
 void * memcpy(void * dest,const void *src,size_t count)
 {
         char *tmp = (char *) dest, *s = (char *) src;
@@ -95,7 +97,7 @@ void * memcpy(void * dest,const void *src,size_t count)
 
         return dest;
 }
-
+#endif /* CFG_DDR_TEST */
 
 int disk_read (__u32 startblock, __u32 getsize, __u8 * bufptr)
 {

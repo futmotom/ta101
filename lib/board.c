@@ -35,7 +35,6 @@
 #include <fat.h>
 #include <mmc.h>
 
-#ifdef CONFIG_NEWERA4430ES2
 #ifdef CFG_DDR_TEST
 #define __arch_putl(v,a)		(*(volatile unsigned int *)(a) = (v))
 #define __raw_writel(v,a)		__arch_putl(v,a)
@@ -43,8 +42,13 @@
 #define writel(v,a)			(*(unsigned int *)(a) = (v))
 #define readl(a)			(*(unsigned int *)(a))
 
+#if defined(CFG_ELPDIA_1G) || defined(CFG_MICRON_1G)
+#define LPDDR2_START	0x80000000
+#define LPDDR2_END	0xBFFFFFFF
+#else
 #define LPDDR2_START	0x80000000
 #define LPDDR2_END	0x9FFFFFFF
+#endif
 
 #define puts	serial_puts
 #define putc	serial_putc
@@ -64,7 +68,6 @@ void * memcpy(void * dest,const void *src,size_t count)
 	return dest;
 }
 #endif /* CFG_DDR_TEST */
-#endif /* CONFIG_NEWERA4430ES2 */
 
 #ifdef CFG_PRINTF
 int print_info(void)
@@ -89,7 +92,6 @@ init_fnc_t *init_sequence[] = {
 	NULL,
 };
 
-#ifdef CONFIG_NEWERA4430ES2
 #ifdef CFG_DDR_TEST
 int ddr_test(void)
 {
@@ -292,7 +294,6 @@ int ddr_test(void)
 	return ret;
 }
 #endif /* CFG_DDR_TEST */
-#endif /* CONFIG_NEWERA4430ES2 */
 
 #ifdef CFG_CMD_FAT
 extern char * strcpy(char * dest,const char *src);
