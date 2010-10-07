@@ -609,12 +609,10 @@ void s_init(void)
 #endif	
 	prcm_init();
 
-#ifdef CONFIG_NEWERA4430ES2
 #ifdef CFG_DDR_TEST
 	serial_init();
 	ddr_test();
 #endif /* CFG_DDR_TEST */
-#endif /* CONFIG_NEWERA4430ES2 */
 
 }
 

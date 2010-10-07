@@ -609,6 +609,11 @@ void s_init(void)
 #endif	
 	prcm_init();
 
+#ifdef CFG_DDR_TEST
+	serial_init();
+	ddr_test();
+#endif /* CFG_DDR_TEST */
+
 }
 
 /*******************************************************
@@ -694,77 +699,77 @@ int dram_init(void)
 	MV(CP(GPMC_AD5) , ( PTU | IEN | OFF_EN | OFF_PD | OFF_IN | M1))  /* sdmmc2_dat5 */ \
 	MV(CP(GPMC_AD6) , ( PTU | IEN | OFF_EN | OFF_PD | OFF_IN | M1))  /* sdmmc2_dat6 */ \
 	MV(CP(GPMC_AD7) , ( PTU | IEN | OFF_EN | OFF_PD | OFF_IN | M1))  /* sdmmc2_dat7 */ \
-	MV(CP(GPMC_AD8) , ( PTU | IEN | OFF_EN | OFF_PD | OFF_IN | M3))  /* gpio_32 */ \
-	MV(CP(GPMC_AD9) , ( PTU | IEN | M3))  /* gpio_33 */ \
-	MV(CP(GPMC_AD10) , ( PTU | IEN | M3))  /* gpio_34 */ \
-	MV(CP(GPMC_AD11) , ( PTU | IEN | M3))  /* gpio_35 */ \
-	MV(CP(GPMC_AD12) , ( PTU | IEN | M3))  /* gpio_36 */ \
-	MV(CP(GPMC_AD13) , ( PTD | OFF_EN | OFF_PD | OFF_OUT_PTD | M3))  /* gpio_37 */ \
-	MV(CP(GPMC_AD14) , ( PTD | OFF_EN | OFF_PD | OFF_OUT_PTD | M3))  /* gpio_38 */ \
-	MV(CP(GPMC_AD15) , ( PTD | OFF_EN | OFF_PD | OFF_OUT_PTD | M3))  /* gpio_39 */ \
-	MV(CP(GPMC_A16) , ( M3))  /* gpio_40 */ \
+	MV(CP(GPMC_AD8) , ( M3 ))  /* gpio_32, proximity sensor out to OMAP, not connected */ \
+	MV(CP(GPMC_AD9) , ( M3 ))  /* gpio_33, accelerometers U14 INT to OMAP, not connected */ \
+	MV(CP(GPMC_AD10) , ( OFF_EN | OFF_OUT | OFF_OUT_PTU | M3 )) /* gpio_34, Touch Panel B reset */ \
+	MV(CP(GPMC_AD11) , ( M3 )) /* gpio_35, MDM_PWRON control signal to PCIE mini J3, not connected */ \
+	MV(CP(GPMC_AD12) , ( M3 )) /* gpio_36, MDM_RST control signal to PCIE mini J3, not connected */ \
+	MV(CP(GPMC_AD13) , ( M3 )) /* gpio_37, MDM_RST drive by MDM, not connected */ \
+	MV(CP(GPMC_AD14) , PTD | OFF_EN | OFF_PD | OFF_OUT_PTD | M3) /* gpio_38, shutdown signal to camera module */ \
+	MV(CP(GPMC_AD15) , ( M7 )) /* unused */ \
+	MV(CP(GPMC_A16) , ( M3 ))  /* gpio_40, control signal to SD_CLK_SELECT, not connected */ \
 	MV(CP(GPMC_A17) , ( PTD | M3))  /* gpio_41 */ \
-	MV(CP(GPMC_A18) , ( PTU | IEN | OFF_EN | OFF_PD | OFF_IN | M1))  /* kpd_row6 */ \
-	MV(CP(GPMC_A19) , ( PTU | IEN | OFF_EN | OFF_PD | OFF_IN | M1))  /* kpd_row7 */ \
-	MV(CP(GPMC_A20) , ( IEN | M3))  /* gpio_44 */ \
-	MV(CP(GPMC_A21) , ( M3))  /* gpio_45 */ \
-	MV(CP(GPMC_A22) , ( OFF_EN | OFF_PD | OFF_IN | M1))  /* kpd_col6 */ \
-	MV(CP(GPMC_A23) , ( OFF_EN | OFF_PD | OFF_IN | M1))  /* kpd_col7 */ \
-	MV(CP(GPMC_A24) , ( PTD | M3))  /* gpio_48 */ \
+	MV(CP(GPMC_A18) , ( PTD | IEN | OFF_EN | OFF_PD | OFF_IN | M3))  /* gpio_42, reset button */ \
+	MV(CP(GPMC_A19) , ( PTD | IEN | OFF_EN | OFF_PD | OFF_IN | M3))  /* gpio_43, BOOT SWITCH */ \
+	MV(CP(GPMC_A20) , ( PTD | IEN | OFF_EN | OFF_PD | OFF_IN | M3))  /* gpio_44, LSM303DLH INT1 output */ \
+	MV(CP(GPMC_A21) , ( PTD | IEN | OFF_EN | OFF_PD | OFF_IN | M3))  /* gpio_45, LSM303DLH INT2 output*/ \
+	MV(CP(GPMC_A22) , ( PTD | IEN | OFF_EN | OFF_PD | OFF_IN | M3))  /* gpio_46, LSM303DLH DRDY_M output */ \
+	MV(CP(GPMC_A23) , ( M3 ))  /* gpio_47, drive power enable for Camera AF_2V8/MIPI 2V8, not connected */ \
+	MV(CP(GPMC_A24) , ( M3 ))  /* gpio_48, enable VPROX power switch U13 */ \
 	MV(CP(GPMC_A25) , ( PTD | M3))  /* gpio_49 */ \
 	MV(CP(GPMC_NCS0) , ( M3))  /* gpio_50 */ \
-	MV(CP(GPMC_NCS1) , ( IEN | M3))  /* gpio_51 */ \
-	MV(CP(GPMC_NCS2) , ( IEN | M3))  /* gpio_52 */ \
-	MV(CP(GPMC_NCS3) , ( IEN | M3))  /* gpio_53 */ \
+	MV(CP(GPMC_NCS1) , ( PTD | IEN | OFF_EN | OFF_PD | OFF_IN | M3))  /* gpio_51, INT signal from Ambient Light & PROX sensor */ \
+	MV(CP(GPMC_NCS2) , ( IEN | M3))  /* gpio_52, Host Wake signal for BT WL1273. */ \
+	MV(CP(GPMC_NCS3) , ( PTD | IEN | OFF_EN | OFF_PD | OFF_IN | M3))  /* gpio_53, WL1273 WLAN IRQ */ \
 	MV(CP(GPMC_NWP) , ( M3))  /* gpio_54 */ \
-	MV(CP(GPMC_CLK) , ( PTD | M3))  /* gpio_55 */ \
-	MV(CP(GPMC_NADV_ALE) , ( M3))  /* gpio_56 */ \
+	MV(CP(GPMC_CLK) , ( M3))  /* gpio_55, I/O I2C bus repeater EN (H) */ \
+	MV(CP(GPMC_NADV_ALE) , ( M3))  /* gpio_56, drive LED, active low */ \
 	MV(CP(GPMC_NOE) , ( PTU | IEN | OFF_EN | OFF_OUT_PTD | M1))  /* sdmmc2_clk */ \
 	MV(CP(GPMC_NWE) , ( PTU | IEN | OFF_EN | OFF_PD | OFF_IN | M1))  /* sdmmc2_cmd */ \
-	MV(CP(GPMC_NBE0_CLE) , ( M3))  /* gpio_59 */ \
+	MV(CP(GPMC_NBE0_CLE) , ( M3))  /* gpio_59, Camera Flash Enable */ \
 	MV(CP(GPMC_NBE1) , ( PTD | M3))  /* gpio_60 */ \
-	MV(CP(GPMC_WAIT0) , ( PTU | IEN | M3))  /* gpio_61 */ \
-	MV(CP(GPMC_WAIT1) , ( IEN | M3))  /* gpio_62 */ \
-	MV(CP(C2C_DATA11) , ( PTD | M3))  /* gpio_100 */ \
-	MV(CP(C2C_DATA12) , ( M1))  /* dsi1_te0 */ \
-	MV(CP(C2C_DATA13) , ( PTD | M3))  /* gpio_102 */ \
-	MV(CP(C2C_DATA14) , ( M1))  /* dsi2_te0 */ \
-	MV(CP(C2C_DATA15) , ( PTD | M3))  /* gpio_104 */ \
+	MV(CP(GPMC_WAIT0) , ( M3))  /* gpio_61, Microphone Amp U6 Enable */ \
+	MV(CP(GPMC_WAIT1) , ( M3))  /* gpio_62, Summit Charging IC OTG_LBR */ \
+	MV(CP(C2C_DATA11) , ( PTD | M3))  /* gpio_100, Summit Charging IC USB5_1_HC */ \
+	MV(CP(C2C_DATA12) , ( M7))  /* unused */ \
+	MV(CP(C2C_DATA13) , ( M3))  /* gpio_102, Disp0_RSTX */ \
+	MV(CP(C2C_DATA14) , ( PTD | IEN | OFF_EN | OFF_PD | OFF_IN | M3))  /* gpio_103, SMT_INT edge */ \
+	MV(CP(C2C_DATA15) , ( OFF_EN | OFF_OUT | OFF_OUT_PTU | M3))  /* gpio_104, OLED DISP1 ON, not connected */ \
 	MV(CP(HDMI_HPD) , ( M0))  /* hdmi_hpd */ \
 	MV(CP(HDMI_CEC) , ( M0))  /* hdmi_cec */ \
 	MV(CP(HDMI_DDC_SCL) , ( PTU | M0))  /* hdmi_ddc_scl */ \
 	MV(CP(HDMI_DDC_SDA) , ( PTU | IEN | M0))  /* hdmi_ddc_sda */ \
-	MV(CP(CSI21_DX0) , ( IEN | M0))  /* csi21_dx0 */ \
-	MV(CP(CSI21_DY0) , ( IEN | M0))  /* csi21_dy0 */ \
-	MV(CP(CSI21_DX1) , ( IEN | M0))  /* csi21_dx1 */ \
-	MV(CP(CSI21_DY1) , ( IEN | M0))  /* csi21_dy1 */ \
-	MV(CP(CSI21_DX2) , ( IEN | M0))  /* csi21_dx2 */ \
-	MV(CP(CSI21_DY2) , ( IEN | M0))  /* csi21_dy2 */ \
-	MV(CP(CSI21_DX3) , ( PTD | M7))  /* csi21_dx3 */ \
-	MV(CP(CSI21_DY3) , ( PTD | M7))  /* csi21_dy3 */ \
-	MV(CP(CSI21_DX4) , ( PTD | OFF_EN | OFF_PD | OFF_IN | M7))  /* csi21_dx4 */ \
-	MV(CP(CSI21_DY4) , ( PTD | OFF_EN | OFF_PD | OFF_IN | M7))  /* csi21_dy4 */ \
+	MV(CP(CSI21_DX0) , ( PTD | IEN | OFF_EN | OFF_PD | OFF_IN | M3))  /* gpi_67, reserved for hinge detection */ \
+	MV(CP(CSI21_DY0) , ( PTU | IEN | OFF_EN | OFF_PD | OFF_IN | M3))  /* gpi_68, reserved for hinge detection */ \
+	MV(CP(CSI21_DX1) , ( PTU | IEN | OFF_EN | OFF_PD | OFF_IN | M3))  /* gpi_69, reserved for hinge detection */ \
+	MV(CP(CSI21_DY1) , ( PTU | IEN | OFF_EN | OFF_PU | OFF_IN | M3))  /* gpi_70, TOUCH A MISO detection */ \
+	MV(CP(CSI21_DX2) , ( PTU | IEN | OFF_EN | OFF_PU | OFF_IN | M3))  /* gpi_71, TOUCH1 A ATTN */ \
+	MV(CP(CSI21_DY2) , ( PTU | IEN | OFF_EN | OFF_PU | OFF_IN | M3))  /* gpi_72, TOUCH1 B ATTN */ \
+	MV(CP(CSI21_DX3) , ( PTU | IEN | OFF_EN | OFF_PU | OFF_IN | M3))  /* gpi_73, TOUCH B MISO detection */ \
+	MV(CP(CSI21_DY3) , ( M7))  /* gpi_74, unused */ \
+	MV(CP(CSI21_DX4) , ( PTD | IEN | OFF_EN | OFF_PD | OFF_IN | M3))  /* gpi_75, from hall effect sensor U6908 output */ \
+	MV(CP(CSI21_DY4) , ( PTD | IEN | OFF_EN | OFF_PD | OFF_IN | M3))  /* gpi_76, from hall effect sensor U6909 output */ \
 	MV(CP(CSI22_DX0) , ( IEN | M0))  /* csi22_dx0 */ \
 	MV(CP(CSI22_DY0) , ( IEN | M0))  /* csi22_dy0 */ \
 	MV(CP(CSI22_DX1) , ( IEN | M0))  /* csi22_dx1 */ \
 	MV(CP(CSI22_DY1) , ( IEN | M0))  /* csi22_dy1 */ \
-	MV(CP(CAM_SHUTTER) , ( OFF_EN | OFF_PD | OFF_OUT_PTD | M0))  /* cam_shutter */ \
-	MV(CP(CAM_STROBE) , ( OFF_EN | OFF_PD | OFF_OUT_PTD | M0))  /* cam_strobe */ \
-	MV(CP(CAM_GLOBALRESET) , ( PTD | OFF_EN | OFF_PD | OFF_OUT_PTD | M3))  /* gpio_83 */ \
-	MV(CP(USBB1_ULPITLL_CLK) , ( PTD | IEN | OFF_EN | OFF_PD | OFF_IN | M4))  /* usbb1_ulpiphy_clk */ \
-	MV(CP(USBB1_ULPITLL_STP) , ( OFF_EN | OFF_OUT_PTD | M4))  /* usbb1_ulpiphy_stp */ \
-	MV(CP(USBB1_ULPITLL_DIR) , ( IEN | OFF_EN | OFF_PD | OFF_IN | M4))  /* usbb1_ulpiphy_dir */ \
-	MV(CP(USBB1_ULPITLL_NXT) , ( IEN | OFF_EN | OFF_PD | OFF_IN | M4))  /* usbb1_ulpiphy_nxt */ \
-	MV(CP(USBB1_ULPITLL_DAT0) , ( IEN | OFF_EN | OFF_PD | OFF_IN | M4))  /* usbb1_ulpiphy_dat0 */ \
-	MV(CP(USBB1_ULPITLL_DAT1) , ( IEN | OFF_EN | OFF_PD | OFF_IN | M4))  /* usbb1_ulpiphy_dat1 */ \
-	MV(CP(USBB1_ULPITLL_DAT2) , ( IEN | OFF_EN | OFF_PD | OFF_IN | M4))  /* usbb1_ulpiphy_dat2 */ \
-	MV(CP(USBB1_ULPITLL_DAT3) , ( IEN | OFF_EN | OFF_PD | OFF_IN | M4))  /* usbb1_ulpiphy_dat3 */ \
-	MV(CP(USBB1_ULPITLL_DAT4) , ( IEN | OFF_EN | OFF_PD | OFF_IN | M4))  /* usbb1_ulpiphy_dat4 */ \
-	MV(CP(USBB1_ULPITLL_DAT5) , ( IEN | OFF_EN | OFF_PD | OFF_IN | M4))  /* usbb1_ulpiphy_dat5 */ \
-	MV(CP(USBB1_ULPITLL_DAT6) , ( IEN | OFF_EN | OFF_PD | OFF_IN | M4))  /* usbb1_ulpiphy_dat6 */ \
-	MV(CP(USBB1_ULPITLL_DAT7) , ( IEN | OFF_EN | OFF_PD | OFF_IN | M4))  /* usbb1_ulpiphy_dat7 */ \
-	MV(CP(USBB1_HSIC_DATA) , ( IEN | OFF_EN | OFF_PD | OFF_IN | M0))  /* usbb1_hsic_data */ \
-	MV(CP(USBB1_HSIC_STROBE) , ( IEN | OFF_EN | OFF_PD | OFF_IN | M0))  /* usbb1_hsic_strobe */ \
+	MV(CP(CAM_SHUTTER) , ( M7))  /* unused */ \
+	MV(CP(CAM_STROBE) , ( M3))  /* gpio_82, Camera flash->reset */ \
+	MV(CP(CAM_GLOBALRESET) , ( M3))  /* gpio_83, Camera reset */ \
+	MV(CP(USBB1_ULPITLL_CLK) , ( M7))  /* Reserved for HSI V2 silicon (CAWAKE) */ \
+	MV(CP(USBB1_ULPITLL_STP) , ( M7))  /* Reserved for HSI V2 silicon (CADATA) */ \
+	MV(CP(USBB1_ULPITLL_DIR) , ( M7))  /* Reserved for HSI V2 silicon (CAFLAG) */ \
+	MV(CP(USBB1_ULPITLL_NXT) , ( M7))  /* Reserved for HSI V2 silicon (ACREADY) */ \
+	MV(CP(USBB1_ULPITLL_DAT0) , ( M7))  /* Reserved for HSI V2 silicon (ACWAKE) */ \
+	MV(CP(USBB1_ULPITLL_DAT1) , ( M7))  /* Reserved for HSI V2 silicon (ACDATA) */ \
+	MV(CP(USBB1_ULPITLL_DAT2) , ( M7))  /* Reserved for HSI V2 silicon (ACFLAG) */ \
+	MV(CP(USBB1_ULPITLL_DAT3) , ( M7))  /* Reserved for HSI V2 silicon (CAREADY) */ \
+	MV(CP(USBB1_ULPITLL_DAT4) , ( M3))  /* gpio_92, service request to DB5700 */ \
+	MV(CP(USBB1_ULPITLL_DAT5) , ( M3))  /* gpio_93, drive U26 OLED1 PS ENABLE */ \
+	MV(CP(USBB1_ULPITLL_DAT6) , ( M3))  /* gpio_94, drive U28 OLED2 PS ENABLE */ \
+	MV(CP(USBB1_ULPITLL_DAT7) , ( PTD | IEN | OFF_EN | OFF_PD | OFF_IN | M3))  /* gpio_95, resout2n from DB5700 */ \
+	MV(CP(USBB1_HSIC_DATA) , ( M7))  /* currently unused */ \
+	MV(CP(USBB1_HSIC_STROBE) , ( M7))  /* currently unused */ \
 	MV(CP(USBC1_ICUSB_DP) , ( IEN | M0))  /* usbc1_icusb_dp */ \
 	MV(CP(USBC1_ICUSB_DM) , ( IEN | M0))  /* usbc1_icusb_dm */ \
 	MV(CP(SDMMC1_CLK) , ( PTU | OFF_EN | OFF_OUT_PTD | M0))  /* sdmmc1_clk */ \
@@ -792,8 +797,8 @@ int dram_init(void)
 	MV(CP(ABE_CLKS) , ( PTD | IEN | OFF_EN | OFF_PD | OFF_IN | M0))  /* abe_clks */ \
 	MV(CP(ABE_DMIC_CLK1) , ( M0))  /* abe_dmic_clk1 */ \
 	MV(CP(ABE_DMIC_DIN1) , ( IEN | M0))  /* abe_dmic_din1 */ \
-	MV(CP(ABE_DMIC_DIN2) , ( IEN | M0))  /* abe_dmic_din2 */ \
-	MV(CP(ABE_DMIC_DIN3) , ( IEN | M0))  /* abe_dmic_din3 */ \
+	MV(CP(ABE_DMIC_DIN2),   ( M7)) /* unused */ \
+	MV(CP(ABE_DMIC_DIN3),   ( M7)) /* unused */ \
 	MV(CP(UART2_CTS) , ( PTU | IEN | M0))  /* uart2_cts */ \
 	MV(CP(UART2_RTS) , ( M0))  /* uart2_rts */ \
 	MV(CP(UART2_RX) , ( PTU | IEN | M0))  /* uart2_rx */ \
@@ -807,15 +812,15 @@ int dram_init(void)
 	MV(CP(I2C3_SDA) , ( PTU | IEN | M0))  /* i2c3_sda */ \
 	MV(CP(I2C4_SCL) , ( PTU | IEN | M0))  /* i2c4_scl */ \
 	MV(CP(I2C4_SDA) , ( PTU | IEN | M0))  /* i2c4_sda */ \
-	MV(CP(MCSPI1_CLK) , ( IEN | OFF_EN | OFF_PD | OFF_IN | M0))  /* mcspi1_clk */ \
-	MV(CP(MCSPI1_SOMI) , ( IEN | OFF_EN | OFF_PD | OFF_IN | M0))  /* mcspi1_somi */ \
-	MV(CP(MCSPI1_SIMO) , ( IEN | OFF_EN | OFF_PD | OFF_IN | M0))  /* mcspi1_simo */ \
-	MV(CP(MCSPI1_CS0) , ( PTD | IEN | OFF_EN | OFF_PD | OFF_IN | M0))  /* mcspi1_cs0 */ \
-	MV(CP(MCSPI1_CS1) , ( PTD | IEN | OFF_EN | OFF_PD | OFF_IN | M3))  /* mcspi1_cs1 */ \
-	MV(CP(MCSPI1_CS2) , ( PTU | OFF_EN | OFF_OUT_PTU | M3))  /* gpio_139 */ \
-	MV(CP(MCSPI1_CS3) , ( PTU | IEN | M3))  /* gpio_140 */ \
-	MV(CP(UART3_CTS_RCTX) , ( PTU | IEN | M0))  /* uart3_tx */ \
-	MV(CP(UART3_RTS_SD) , ( M0))  /* uart3_rts_sd */ \
+	MV(CP(MCSPI1_CLK) , ( PTU | IEN | OFF_EN | OFF_PD | OFF_IN | M0))  /* mcspi1_clk */ \
+	MV(CP(MCSPI1_SOMI) , ( PTU | IEN | OFF_EN | OFF_PD | OFF_IN | M0))  /* mcspi1_somi */ \
+	MV(CP(MCSPI1_SIMO) , ( PTU | IEN | OFF_EN | OFF_PD | OFF_IN | M0))  /* mcspi1_simo */ \
+	MV(CP(MCSPI1_CS0) , ( PTU | IEN | OFF_EN | OFF_PD | OFF_IN | M0))  /* mcspi1_cs0, MPIP OLED 1 CS */ \
+	MV(CP(MCSPI1_CS1) , ( PTU | IEN | OFF_EN | OFF_PD | OFF_IN | M0))  /* mcspi1_cs1, touch CS A */ \
+	MV(CP(MCSPI1_CS2) , ( PTU | IEN | OFF_EN | OFF_PD | OFF_IN | M0)) /* mcspi1_cs2, touch CS B */ \
+	MV(CP(MCSPI1_CS3) , ( PTU | IEN | OFF_EN | OFF_PD | OFF_IN | M0)) /* mcspi1_cs3, RGB OLED 2 CS  */ \
+	MV(CP(UART3_CTS_RCTX) , (M3)) /* gpio_141, eMMC 2V8 EN */ \
+	MV(CP(UART3_RTS_SD) , (M7)) /* unused */ \
 	MV(CP(UART3_RX_IRRX) , ( IEN | M0))  /* uart3_rx */ \
 	MV(CP(UART3_TX_IRTX) , ( M0))  /* uart3_tx */ \
 	MV(CP(SDMMC5_CLK) , ( PTU | IEN | OFF_EN | OFF_OUT_PTD | M0))  /* sdmmc5_clk */ \
@@ -824,13 +829,13 @@ int dram_init(void)
 	MV(CP(SDMMC5_DAT1) , ( PTU | IEN | OFF_EN | OFF_PD | OFF_IN | M0))  /* sdmmc5_dat1 */ \
 	MV(CP(SDMMC5_DAT2) , ( PTU | IEN | OFF_EN | OFF_PD | OFF_IN | M0))  /* sdmmc5_dat2 */ \
 	MV(CP(SDMMC5_DAT3) , ( PTU | IEN | OFF_EN | OFF_PD | OFF_IN | M0))  /* sdmmc5_dat3 */ \
-	MV(CP(MCSPI4_CLK) , ( IEN | OFF_EN | OFF_PD | OFF_IN | M0))  /* mcspi4_clk */ \
-	MV(CP(MCSPI4_SIMO) , ( IEN | OFF_EN | OFF_PD | OFF_IN | M0))  /* mcspi4_simo */ \
-	MV(CP(MCSPI4_SOMI) , ( IEN | OFF_EN | OFF_PD | OFF_IN | M0))  /* mcspi4_somi */ \
-	MV(CP(MCSPI4_CS0) , ( PTD | IEN | OFF_EN | OFF_PD | OFF_IN | M0))  /* mcspi4_cs0 */ \
+	MV(CP(MCSPI4_CLK) , ( IEN |  OFF_PD | OFF_IN | M7))  /* safe_mode, mcspi4_clk */ \
+	MV(CP(MCSPI4_SIMO) , ( IEN | OFF_PD | OFF_IN | M7))  /* safe_mode, mcspi4_simo */ \
+	MV(CP(MCSPI4_SOMI) , ( IEN | OFF_PD | OFF_IN | M7))  /* safe_mode, mcspi4_somi */ \
+	MV(CP(MCSPI4_CS0) , ( IEN | OFF_EN | OFF_PD | OFF_IN | M7))  /* safe_mode, mcspi4_cs0 */ \
 	MV(CP(UART4_RX) , ( IEN | M0))  /* uart4_rx */ \
 	MV(CP(UART4_TX) , ( M0))  /* uart4_tx */ \
-	MV(CP(USBB2_ULPITLL_CLK) , ( IEN | M3))  /* gpio_157 */ \
+	MV(CP(USBB2_ULPITLL_CLK) , ( OFF_EN | OFF_OUT | OFF_OUT_PTU | M3)) /* gpio_157, Touch Panel A reset */ \
 	MV(CP(USBB2_ULPITLL_STP) , ( IEN | M5))  /* dispc2_data23 */ \
 	MV(CP(USBB2_ULPITLL_DIR) , ( IEN | M5))  /* dispc2_data22 */ \
 	MV(CP(USBB2_ULPITLL_NXT) , ( IEN | M5))  /* dispc2_data21 */ \
@@ -842,36 +847,36 @@ int dram_init(void)
 	MV(CP(USBB2_ULPITLL_DAT5) , ( IEN | M5))  /* dispc2_data13 */ \
 	MV(CP(USBB2_ULPITLL_DAT6) , ( IEN | M5))  /* dispc2_data12 */ \
 	MV(CP(USBB2_ULPITLL_DAT7) , ( IEN | M5))  /* dispc2_data11 */ \
-	MV(CP(USBB2_HSIC_DATA) , ( PTD | OFF_EN | OFF_OUT_PTU | M3))  /* gpio_169 */ \
-	MV(CP(USBB2_HSIC_STROBE) , ( PTD | OFF_EN | OFF_OUT_PTU | M3))  /* gpio_170 */ \
-	MV(CP(UNIPRO_TX0) , ( OFF_EN | OFF_PD | OFF_IN | M1))  /* kpd_col0 */ \
-	MV(CP(UNIPRO_TY0) , ( OFF_EN | OFF_PD | OFF_IN | M1))  /* kpd_col1 */ \
-	MV(CP(UNIPRO_TX1) , ( OFF_EN | OFF_PD | OFF_IN | M1))  /* kpd_col2 */ \
-	MV(CP(UNIPRO_TY1) , ( OFF_EN | OFF_PD | OFF_IN | M1))  /* kpd_col3 */ \
-	MV(CP(UNIPRO_TX2) , ( OFF_EN | OFF_PD | OFF_IN | M1))  /* kpd_col4 */ \
-	MV(CP(UNIPRO_TY2) , ( OFF_EN | OFF_PD | OFF_IN | M1))  /* kpd_col5 */ \
-	MV(CP(UNIPRO_RX0) , ( PTU | IEN | OFF_EN | OFF_PD | OFF_IN | M1))  /* kpd_row0 */ \
-	MV(CP(UNIPRO_RY0) , ( PTU | IEN | OFF_EN | OFF_PD | OFF_IN | M1))  /* kpd_row1 */ \
-	MV(CP(UNIPRO_RX1) , ( PTU | IEN | OFF_EN | OFF_PD | OFF_IN | M1))  /* kpd_row2 */ \
-	MV(CP(UNIPRO_RY1) , ( PTU | IEN | OFF_EN | OFF_PD | OFF_IN | M1))  /* kpd_row3 */ \
-	MV(CP(UNIPRO_RX2) , ( PTU | IEN | OFF_EN | OFF_PD | OFF_IN | M1))  /* kpd_row4 */ \
-	MV(CP(UNIPRO_RY2) , ( PTU | IEN | OFF_EN | OFF_PD | OFF_IN | M1))  /* kpd_row5 */ \
+	MV(CP(USBB2_HSIC_DATA), (M7)) /* unused */ \
+	MV(CP(USBB2_HSIC_STROBE),       (M7)) /* unused */ \
+	MV(CP(UNIPRO_TX0) , (OFF_EN | OFF_PD | OFF_IN | M1))  /* kpd_col0 */ \
+	MV(CP(UNIPRO_TY0) , (OFF_EN | OFF_PD | OFF_IN | M1))  /* kpd_col1 */ \
+	MV(CP(UNIPRO_TX1) , (OFF_EN | OFF_PD | OFF_IN | M1))  /* kpd_col2 */ \
+	MV(CP(UNIPRO_TY1) , (OFF_EN | OFF_OUT | OFF_OUT_PTU | M3)) /* gpio_174, SPI4_CS_SEL_TOUCH2 gate */ \
+	MV(CP(UNIPRO_TX2) , (OFF_EN | OFF_OUT | OFF_OUT_PTU | M3)) /*  'gpio_0, SPI4_CS_SEL_DISP2 gate' */ \
+	MV(CP(UNIPRO_TY2) , (M7)) /* unused, reserved for EL_ON_2 */ \
+	MV(CP(UNIPRO_RX0) , (PTU | IEN | OFF_EN | OFF_PD | OFF_IN | M1)) /* kpd_row0 */ \
+	MV(CP(UNIPRO_RY0) , (PTU | IEN | OFF_EN | OFF_PD | OFF_IN | M1)) /* kpd_row1 */ \
+	MV(CP(UNIPRO_RX1) , (PTU | IEN | OFF_EN | OFF_PD | OFF_IN | M1)) /* kpd_row2 */ \
+	MV(CP(UNIPRO_RY1) , (M7)) /* unused */ \
+	MV(CP(UNIPRO_RX2) , (M7)) /* unused */ \
+	MV(CP(UNIPRO_RY2) , (M7)) /* unused */ \
 	MV(CP(USBA0_OTG_CE) , ( PTD | OFF_EN | OFF_PD | OFF_OUT_PTD | M0))  /* usba0_otg_ce */ \
 	MV(CP(USBA0_OTG_DP) , ( IEN | OFF_EN | OFF_PD | OFF_IN | M0))  /* usba0_otg_dp */ \
 	MV(CP(USBA0_OTG_DM) , ( IEN | OFF_EN | OFF_PD | OFF_IN | M0))  /* usba0_otg_dm */ \
-	MV(CP(FREF_CLK1_OUT) , ( M0))  /* fref_clk1_out */ \
+	MV(CP(FREF_CLK1_OUT),   (M7)) /* unused */ \
 	MV(CP(FREF_CLK2_OUT) , ( M0))  /* fref_clk2_out */ \
 	MV(CP(SYS_NIRQ1) , ( PTU | IEN | M0))  /* sys_nirq1 */ \
 	MV(CP(SYS_NIRQ2) , ( PTU | IEN | M0))  /* sys_nirq2 */ \
-	MV(CP(SYS_BOOT0) , ( PTU | IEN | M3))  /* gpio_184 */ \
-	MV(CP(SYS_BOOT1) , ( M3))  /* gpio_185 */ \
-	MV(CP(SYS_BOOT2) , ( PTD | IEN | M3))  /* gpio_186 */ \
-	MV(CP(SYS_BOOT3) , ( M3))  /* gpio_187 */ \
-	MV(CP(SYS_BOOT4) , ( M3))  /* gpio_188 */ \
-	MV(CP(SYS_BOOT5) , ( PTD | IEN | M3))  /* gpio_189 */ \
-	MV(CP(DPM_EMU0) , ( IEN | M0))  /* dpm_emu0 */ \
-	MV(CP(DPM_EMU1) , ( IEN | M0))  /* dpm_emu1 */ \
-	MV(CP(DPM_EMU2) , ( IEN | M0))  /* dpm_emu2 */ \
+	MV(CP(SYS_BOOT0) , (M0)) /* SYS BOOT SWITCH */ \
+	MV(CP(SYS_BOOT1) , (M0)) /* SYS BOOT SWITCH */ \
+	MV(CP(SYS_BOOT2) , (M0)) /* SYS BOOT SWITCH */ \
+	MV(CP(SYS_BOOT3) , (M0)) /* SYS BOOT SWITCH */ \
+	MV(CP(SYS_BOOT4) , (M0)) /* SYS BOOT SWITCH */ \
+	MV(CP(SYS_BOOT5) , (M0)) /* SYS BOOT SWITCH */ \
+	MV(CP(DPM_EMU0) , ( PTD | OFF_EN | OFF_PD | OFF_OUT_PTD | M0))  /* dpm_emu0, MIPI debug */ \
+	MV(CP(DPM_EMU1) , ( M3))  /* gpio_12, J33_OLED1_RESET */ \
+	MV(CP(DPM_EMU2) , ( M3))  /* gpio_13, J30_OLED2_RESET */ \
 	MV(CP(DPM_EMU3) , ( IEN | M5))  /* dispc2_data10 */ \
 	MV(CP(DPM_EMU4) , ( IEN | M5))  /* dispc2_data9 */ \
 	MV(CP(DPM_EMU5) , ( IEN | M5))  /* dispc2_data16 */ \
@@ -885,41 +890,39 @@ int dram_init(void)
 	MV(CP(DPM_EMU13) , ( IEN | M5))  /* dispc2_data6 */ \
 	MV(CP(DPM_EMU14) , ( IEN | M5))  /* dispc2_data5 */ \
 	MV(CP(DPM_EMU15) , ( IEN | M5))  /* dispc2_data4 */ \
-	MV(CP(DPM_EMU16) , ( M3))  /* gpio_27 */ \
+	MV(CP(DPM_EMU16) , ( IEN | M5))  /* dispc2_data3 */ \
 	MV(CP(DPM_EMU17) , ( IEN | M5))  /* dispc2_data2 */ \
 	MV(CP(DPM_EMU18) , ( IEN | M5))  /* dispc2_data1 */ \
 	MV(CP(DPM_EMU19) , ( IEN | M5))  /* dispc2_data0 */ \
-	MV1(WK(PAD0_SIM_IO) , ( IEN | M0))  /* sim_io */ \
-	MV1(WK(PAD1_SIM_CLK) , ( M0))  /* sim_clk */ \
-	MV1(WK(PAD0_SIM_RESET) , ( M0))  /* sim_reset */ \
-	MV1(WK(PAD1_SIM_CD) , ( PTU | IEN | M0))  /* sim_cd */ \
-	MV1(WK(PAD0_SIM_PWRCTRL) , ( M0))  /* sim_pwrctrl */ \
+	MV(CP(SYS_BOOT5) , ( M3 )) /* gpio 189 */ \
+	MV1(WK(PAD0_SIM_IO) , ( M3))  /* gpio_wk0, MDM WAKEIN DB5700 */ \
+	MV1(WK(PAD1_SIM_CLK) , ( PTD | IEN | OFF_EN | OFF_PD | OFF_IN | M3))  /* gpio_wk1, DOCK_DET_WAKE->HDMI HPD INT */ \
+	MV1(WK(PAD0_SIM_RESET) , ( PTD | IEN | OFF_EN | OFF_PD | OFF_IN | M3))  /* gpio_wk2, BUTTON_WAKE */ \
+	MV1(WK(PAD1_SIM_CD) , ( PTD | IEN | OFF_EN | OFF_PD | OFF_IN | M3))  /* gpio_wk3, Lid switch wake signal */ \
+	MV1(WK(PAD0_SIM_PWRCTRL) , ( PTD | IEN | OFF_EN | OFF_PD | OFF_IN | M3))  /* gpio_wk4, Lid switch wake signal */ \
 	MV1(WK(PAD1_SR_SCL) , ( PTU | IEN | M0))  /* sr_scl */ \
 	MV1(WK(PAD0_SR_SDA) , ( PTU | IEN | M0))  /* sr_sda */ \
 	MV1(WK(PAD1_FREF_XTAL_IN) , ( M0))  /* # */ \
 	MV1(WK(PAD0_FREF_SLICER_IN) , ( M0))  /* fref_slicer_in */ \
 	MV1(WK(PAD1_FREF_CLK_IOREQ) , ( M0))  /* fref_clk_ioreq */ \
 	MV1(WK(PAD0_FREF_CLK0_OUT) , ( M2))  /* sys_drm_msecure */ \
-	MV1(WK(PAD1_FREF_CLK3_REQ) , ( PTU | IEN | M0))  /* # */ \
-	MV1(WK(PAD0_FREF_CLK3_OUT) , ( M0))  /* fref_clk3_out */ \
-	MV1(WK(PAD1_FREF_CLK4_REQ) , ( PTU | IEN | M0))  /* # */ \
-	MV1(WK(PAD0_FREF_CLK4_OUT) , ( M0))  /* # */ \
+	MV1(WK(PAD1_FREF_CLK3_REQ),     (M7)) /* unused, reserved for EL_ON_1 control */ \
+	MV1(WK(PAD0_FREF_CLK3_OUT),     (M7)) /* unused */ \
+	MV1(WK(PAD1_FREF_CLK4_REQ),     (M0_SAFE)) /* unused, don't support M7 in manual */ \
+	MV1(WK(PAD0_FREF_CLK4_OUT),     (M0_SAFE)) /* unused, don't support M7 in manual */ \
 	MV1(WK(PAD1_SYS_32K) , ( IEN | M0))  /* sys_32k */ \
 	MV1(WK(PAD0_SYS_NRESPWRON) , ( M0))  /* sys_nrespwron */ \
 	MV1(WK(PAD1_SYS_NRESWARM) , ( M0))  /* sys_nreswarm */ \
 	MV1(WK(PAD0_SYS_PWR_REQ) , ( PTU | M0))  /* sys_pwr_req */ \
-	MV1(WK(PAD1_SYS_PWRON_RESET) , ( M3))  /* gpio_wk29 */ \
-	MV1(WK(PAD0_SYS_BOOT6) , ( IEN | M3))  /* gpio_wk9 */ \
-	MV1(WK(PAD1_SYS_BOOT7) , ( IEN | M3))  /* gpio_wk10 */ \
-	MV1(WK(PAD1_FREF_CLK3_REQ),     (M3)) /* gpio_wk30 */ \
-	MV1(WK(PAD1_FREF_CLK4_REQ),     (M3)) /* gpio_wk7 */ \
-	MV1(WK(PAD0_FREF_CLK4_OUT),     (M3)) /* gpio_wk8 */
+	MV1(WK(PAD1_SYS_PWRON_RESET) , ( PTD | IEN | OFF_EN | OFF_PD | OFF_IN | M3))  /* gpio_wk29, PMIC INT */ \
+	MV1(WK(PAD0_SYS_BOOT6) , ( PTD | IEN | OFF_EN | OFF_PD | OFF_IN | M3))  /* gpio_wk9, MDM_RST_IN */ \
+	MV1(WK(PAD1_SYS_BOOT7) , ( M0))  /* SYS BOOT SWITCH */ \
 //	MV1(WK(PAD0_JTAG_NTRST) , ( IEN | M0))  /* jtag_ntrst */ \
 	MV1(WK(PAD1_JTAG_TCK) , ( IEN | M0))  /* jtag_tck */ \
 	MV1(WK(PAD0_JTAG_RTCK) , ( M0))  /* jtag_rtck */ \
 	MV1(WK(PAD1_JTAG_TMS_TMSC) , ( IEN | M0))  /* jtag_tms_tmsc */ \
 	MV1(WK(PAD0_JTAG_TDI) , ( IEN | M0))  /* jtag_tdi */ \
-	MV1(WK(PAD1_JTAG_TDO) , ( M0))  /* jtag_tdo */ 
+	MV1(WK(PAD1_JTAG_TDO) , ( M0))  /* jtag_tdo */
  
 #define MUX_DEFAULT_OMAP4_ALL() \
   	MV(CP(GPMC_AD0),	(PTU | IEN | OFF_EN | OFF_PD | OFF_IN | M1)) /* sdmmc2_dat0 */ \
