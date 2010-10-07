@@ -177,6 +177,11 @@ newera4430adbes2_config :    unconfig
 	echo "/* Generarated file. Do not edit */" >./include/config.h
 	echo "#include <configs/newera4430adbes2.h>" >>./include/config.h
 
+newera4430ev1_config :    unconfig
+	@./mkconfig $(@:_config=) arm omap4 newera4430ev1
+	echo "/* Generarated file. Do not edit */" >./include/config.h
+	echo "#include <configs/newera4430ev1.h>" >>./include/config.h
+
 omap3430labrador_config :    unconfig
 	@./mkconfig $(@:_config=) arm omap3 omap3430labrador
 
