@@ -702,7 +702,7 @@ int dram_init(void)
 	MV(CP(GPMC_AD8) , ( M3 ))  /* gpio_32, proximity sensor out to OMAP, not connected */ \
 	MV(CP(GPMC_AD9) , ( M3 ))  /* gpio_33, accelerometers U14 INT to OMAP, not connected */ \
 	MV(CP(GPMC_AD10) , ( OFF_EN | OFF_OUT | OFF_OUT_PTU | M3 )) /* gpio_34, Touch Panel B reset */ \
-	MV(CP(GPMC_AD11) , ( M3 )) /* gpio_35, MDM_PWRON control signal to PCIE mini J3, not connected */ \
+	MV(CP(GPMC_AD11) , ( PTD | IEN | M3 )) /* gpio_35, MDM_PWRON control signal to PCIE mini J3 */ \
 	MV(CP(GPMC_AD12) , ( M3 )) /* gpio_36, MDM_RST control signal to PCIE mini J3, not connected */ \
 	MV(CP(GPMC_AD13) , ( M3 )) /* gpio_37, MDM_RST drive by MDM, not connected */ \
 	MV(CP(GPMC_AD14) , PTD | OFF_EN | OFF_PD | OFF_OUT_PTD | M3) /* gpio_38, shutdown signal to camera module */ \
@@ -756,14 +756,14 @@ int dram_init(void)
 	MV(CP(CAM_SHUTTER) , ( M7))  /* unused */ \
 	MV(CP(CAM_STROBE) , ( M3))  /* gpio_82, Camera flash->reset */ \
 	MV(CP(CAM_GLOBALRESET) , ( M3))  /* gpio_83, Camera reset */ \
-	MV(CP(USBB1_ULPITLL_CLK) , ( M7))  /* Reserved for HSI V2 silicon (CAWAKE) */ \
-	MV(CP(USBB1_ULPITLL_STP) , ( M7))  /* Reserved for HSI V2 silicon (CADATA) */ \
-	MV(CP(USBB1_ULPITLL_DIR) , ( M7))  /* Reserved for HSI V2 silicon (CAFLAG) */ \
-	MV(CP(USBB1_ULPITLL_NXT) , ( M7))  /* Reserved for HSI V2 silicon (ACREADY) */ \
-	MV(CP(USBB1_ULPITLL_DAT0) , ( M7))  /* Reserved for HSI V2 silicon (ACWAKE) */ \
-	MV(CP(USBB1_ULPITLL_DAT1) , ( M7))  /* Reserved for HSI V2 silicon (ACDATA) */ \
-	MV(CP(USBB1_ULPITLL_DAT2) , ( M7))  /* Reserved for HSI V2 silicon (ACFLAG) */ \
-	MV(CP(USBB1_ULPITLL_DAT3) , ( M7))  /* Reserved for HSI V2 silicon (CAREADY) */ \
+	MV(CP(USBB1_ULPITLL_CLK) , ( IEN | OFF_EN | OFF_IN | M1))  /* hsi1_cawake */ \
+	MV(CP(USBB1_ULPITLL_STP) , ( IEN | OFF_EN | OFF_IN | M1))  /* hsi1_cadata */ \
+	MV(CP(USBB1_ULPITLL_DIR) , ( IEN | OFF_EN | OFF_IN | M1))  /* hsi1_caflag */ \
+	MV(CP(USBB1_ULPITLL_NXT) , ( OFF_EN | M1))  /* hsi1_acready */ \
+	MV(CP(USBB1_ULPITLL_DAT0) , ( OFF_EN | M1))  /* hsi1_acwake */ \
+	MV(CP(USBB1_ULPITLL_DAT1) , ( OFF_EN | M1))  /* hsi1_acdata */ \
+	MV(CP(USBB1_ULPITLL_DAT2) , ( OFF_EN | M1))  /* hsi1_acflag */ \
+	MV(CP(USBB1_ULPITLL_DAT3) , ( IEN | OFF_EN | OFF_IN | M1))  /* hsi1_caready */ \
 	MV(CP(USBB1_ULPITLL_DAT4) , ( M3))  /* gpio_92, service request to DB5700 */ \
 	MV(CP(USBB1_ULPITLL_DAT5) , ( M3))  /* gpio_93, drive U26 OLED1 PS ENABLE */ \
 	MV(CP(USBB1_ULPITLL_DAT6) , ( M3))  /* gpio_94, drive U28 OLED2 PS ENABLE */ \
@@ -795,10 +795,10 @@ int dram_init(void)
 	MV(CP(ABE_PDM_FRAME) , ( PTU | IEN | OFF_EN | OFF_PD | OFF_IN | M0))  /* abe_pdm_frame */ \
 	MV(CP(ABE_PDM_LB_CLK) , ( PTD | IEN | OFF_EN | OFF_PD | OFF_IN | M0))  /* abe_pdm_lb_clk */ \
 	MV(CP(ABE_CLKS) , ( PTD | IEN | OFF_EN | OFF_PD | OFF_IN | M0))  /* abe_clks */ \
-	MV(CP(ABE_DMIC_CLK1) , ( M0))  /* abe_dmic_clk1 */ \
-	MV(CP(ABE_DMIC_DIN1) , ( IEN | M0))  /* abe_dmic_din1 */ \
-	MV(CP(ABE_DMIC_DIN2),   ( M7)) /* unused */ \
-	MV(CP(ABE_DMIC_DIN3),   ( M7)) /* unused */ \
+	MV(CP(ABE_DMIC_CLK1) , ( PTU | IEN | M5))  /* uart4_cts - for blue wire fix  */ \
+	MV(CP(ABE_DMIC_DIN1) , ( M5))  /* uart4_rts - for blue wire fix  */ \
+	MV(CP(ABE_DMIC_DIN2) , ( IEN | M0))  /* abe_dmic_din2 */ \
+	MV(CP(ABE_DMIC_DIN3) , ( M2))  /* abe_dmic_clk2 - for blue wire fix  */ \
 	MV(CP(UART2_CTS) , ( PTU | IEN | M0))  /* uart2_cts */ \
 	MV(CP(UART2_RTS) , ( M0))  /* uart2_rts */ \
 	MV(CP(UART2_RX) , ( PTU | IEN | M0))  /* uart2_rx */ \
