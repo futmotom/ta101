@@ -40,7 +40,7 @@
 #define CONFIG_OMAP4430          1    /* which is in a 3430 */
 #define CONFIG_4430SDP           1    /* working with SDP */
 #define CONFIG_NEWERA4430ES2     1    /* for the ES2 target */
-#define CONFIG_MPU_600           1    /* which uses the 600MHz MPU */
+#define CONFIG_MPU_1000          1    /* which uses the 1000MHz MPU */
 
 #define CORE_190MHZ		1
 /* Enable the below macro if MMC boot support is required */
