@@ -1,0 +1,292 @@
+http://alex.fu@10.118.198.44:8081/p/ambush/flextronics/android/device/flex/neweraaadbes2.git
+ssh://alex.fu@10.118.198.44:29418/ambush/flextronics/android/device/flex/neweraaadbes2.git
+
+
+
+
+From: Alex Fu 
+Sent: Thursday, October 14, 2010 2:03 PM
+To: Anthony Russello
+Subject: RE: week report of Alex 
+
+Dear Anthony:
+    Would you please advice my study report in the below. 
+
+- evel 
+       contain make setting of u-boot, x-loader, kernel, android, for each target
+       use u-boot.mk as example described in the last. 
+- review android/device/flex
+       contain
+       1.target definition BoardConfig   
+       2.init.rc:a custom version of the init.rc file, which is read in by the system init process during boot
+       3.apns-conf.xml contains the APN names needed by the emulator device, so that is can use the reference RIL to connect to the internet
+       4.system.prop  This file is sourced at build time for different system property values
+       5.omap_keypad.kcm/.kl These are keymap files used by the emulator
+       6.vold.conf/vold.fstab These are files used by the vold process for mounting/unmounting the sdcard partition
+       7.overlay/config.sys contain backlight setting with ambient. 
+- review android/hardware/newera
+    contain backlight, sensor driver code. 
+    backlight is only OPEN function to set on/off.
+    sensor contain code of capella Proximity, Light sensor  
+- review our kernels, u-boot, and x-loader
+  the relation of them are: when system boot up.
+    1. X-loader(MLO).
+          init RAM, clock, serial port.
+          board.c start_armboot() read u-boot from MMC and run it. 
+    2.u-boot 
+      memory initialization (lowlevel_init.s)
+      neweraadbes2.h memory organization
+      GPIO init 
+      init follow devices 
+      audio:twl4030
+      power manager:twl6030
+      ethernet:ks8851 
+      i2c 
+      touch panel
+      mmc_init
+      armlinux.c do_bootm_linux()   load Kernel (uImage)
+      
+    3.Kernel  
+      make xconfig to config kernel and save to arch/arm/configs. 
+      could add our device driver here. 
+      load android rootfs(system.img).
+     
+ 
+- evel    
+To add a new target, we could use template directory to add our new target.  
+And I explain u-boot.mk mechanism
+  /devel/targets/target/uboot.mk 
+     define neweraadbes2-uboot-configure
+     make ARCH=arm CROSS_COMPILE=arm-ti- neweraadbes2_config >> $(log)
+     
+/home/alex/froyo/u-boot/omap4/Makefile
+    neweraadbes2_config :    unconfig
+    /mkconfig -a $(call xtract_neweraadb,$@) arm omap4 neweraadbes2
+/home/alex/froyo/u-boot/omap4/board/neweraadbes2
+
+/home/alex/froyo/u-boot/omap4/include/configs/neweraadbes2.h
+      #define CONFIG_NEWERAADBES2   1    /* Build for ES2 ADB variant */
+      
+in uboot source code 
+  #if defined(CONFIG_NEWERAADBES2)      
+       add target hardware dependence code.
+
+And These days I compared Froyo-internel with TI p_foryo., u-boot with Ti Blaze u-boot,
+ newera4430adbes2 x-boot with TI omap3430sdp x-boot
+ I found I have to enhance my git and repo skills and I will.
+
+Thanks, 
+Alex  
+
+
+-----Original Message-----
+From: Anthony Russello 
+Sent: Sunday, October 10, 2010 8:01 PM
+To: Alex Fu
+Subject: Re: week report of alex 
+
+Hi Alex,
+
+Thank you for the report. Monday is a flex holiday, after that I would like you to look at the following for coding standards:
+
+- pull froyo_internal
+- review the contents of the devel folder
+- review our kernels, u-boot, and x-loader
+- review android/hardware/newera
+- review android/device/flex
+
+Alex Fu <Alex.Fu@tw.flextronics.com> wrote:
+
+Hi Anthony: 
+ My weekly report is as follow, 
+Done in this week:  
+a.Training.
+ 1.New employee on board Training.
+ 2.Flextronics Code of Business Conduct and Ethics.
+
+b.Setup Working environment for
+        .Code Build. 
+        .Source Control.  
+c.Study project related documents and devnote.  
+  .Source control and Gerrit review system.
+  .Hydroid related document
+
+To do in next week. 
+  .Present .repo and git frequently usage in project.
+  
+Best Regards,
+Alex. 
+
+=========================================================
+
+
+device/flex/
+
+ The following product types are currently supported:
+#    neweraemu -> emulator
+#    newerafsl -> babbage
+#    neweradb2 -> devboardr2 
+#    newerablz -> blaze
+#    newerax2  -> omap4_X2 
+#    neweraste -> emulator_ste
+#    undefined -> (value not set)
+
+Blaze
+
+   # change permissions for Sensors
+    chown system system /sys/bus/i2c/drivers/cma3000_accl/4-001c
+    chown system system /sys/bus/i2c/drivers/cma3000_accl/4-001c/enable
+    chown system system /sys/bus/i2c/drivers/cma3000_accl/4-001c/delay
+    chown system system /sys/devices/platform/sfh7741.1
+    chown system system /sys/devices/platform/sfh7741.1/state
+    chown system system /sys/bus/i2c/drivers/bmp085/4-0077
+    chown system system /sys/bus/i2c/drivers/bmp085/4-0077/enable
+
+
+
+
+
+Ti boot     
+First Stage Boot
+SYS_BOOT init Serial(UART3), SD Card(MMC1 and MMC2), Nand and USB.
+
+Flash SD card 
+the FAT32 partition is used for uboot, xloader, and kernel. The ext3 partitions is used for the actual file systemt
+
+
+omap4430sdp.c
+newera4430adbes2.c 
+gpio definition changes
+
+Dear Anthony:
+ My study report as follow:
+
+boot sequence 
+4.X-loader-> u-boot
+x-booter
+NAND init 
+serial port init. 
+clock 
+board.c function  start_armboot() load u-boot
+
+
+u-boot 
+
+Kernel  u_image
+Detect and Initiate Hardware
+Mount androidRootfs system.img
+
+/device/flex/init.c 
+
+
+
+
+
+- evel 
+       contain make setting of uboot, x-loader, kernel, android, for each target   
+- review android/device/flex
+       contain
+       1.target definition BoardConfig   
+       2.init.rc:a custom version of the init.rc file, which is read in by the system init process during boot
+       3.apns-conf.xml contains the APN names needed by the emulator device, so that is can use the reference RIL to connect to the internet
+       4.system.prop  This file is sourced at build time for different system property values
+       5.omap_keypad.kcm/.kl These are keymap files used by the emulator
+       6.vold.conf/vold.fstab These are files used by the vold process for mounting/unmounting the sdcard partition
+       7.overlay/config.sys contain backlight setting with ambient. 
+- review android/hardware/newera
+    contain backlight, sensor driver code. 
+    backlight is obly OPEN function to set on/off.
+    sensor contain code of capella Proximity, Light sensor  
+- review our kernels, u-boot, and x-loader
+  the relation of them are: when system boot up.
+    1.ROM load X-loader(MLO)
+          init RAM,clock,serial port.and board.c start_armboot() read uboot from MMC and run it. 
+    2.u-boot 
+      memory initialization (lowlevel_init.s)
+      neweraadbes2.h memory organisation
+      GPIO init 
+      init follow devices 
+      audio:twl4030
+      power manager:twl6030
+      ethernet:ks8851 
+      i2c 
+      touch panel
+      mmc_init
+      armlinux.c do_bootm_linux()   load Kernel (uImage)
+      
+    3.Kernel  
+      make xconfig to config kernel and save to arch/arm/configs. 
+      could add our device driver here. 
+      load android rootfs(system.img).
+      
+      
+These days I compare Froyo-internel with p_foryo., u-boot with Ti Blaze u-boot,
+ newera4430adbes2 x-boot with TI omap3430sdp x-boot
+ I found I have to enhance my git and repo skills. I will study them. 
+ 
+  
+  
+      
+
+       
+      
+      
+      
+          *
+      root/ : root file system (including init, init.rc, etc). Will be mounted at ”/”
+    *
+      system/: Android system binary/libraries. Will be mounted at ”/system”
+    *
+      data/: Android data area. Will be mounted at ”/data”
+
+Above 3 folders can be used to create your Android file system for NFS mounting, i.e. “root/” → ”/”, “system/” → ”/system”, “data/” → ”/data”
+
+    *
+      recovery/: root file system when booting in “recovery” mode. Not directly used.
+
+    *
+      ramdisk.img: Ramdisk image generated from “root/”. Not directly used.
+    *
+      system.img: EXT3 image generated from “system/”. Can be programmed to “SYSTEM” partition on SD card with “dd”
+    *
+      userdata.img: EXT3 image generated from “data/”.
+    *
+      recovery.img: EXT3 image generated from “recovery/”. Can be programmed to “RECOVERY” partition on SD card with “dd”
+
+       
+    
+ 
+
+- evel
+ explain u-boot make mechanism
+  /devel/targets/target/uboot.mk 
+     define neweraadbes2-uboot-configure
+     make ARCH=arm CROSS_COMPILE=arm-ti- neweraadbes2_config >> $(log)
+     
+/home/alex/froyo/u-boot/omap4/Makefile
+    neweraadbes2_config :    unconfig
+    /mkconfig -a $(call xtract_neweraadb,$@) arm omap4 neweraadbes2
+
+/home/alex/froyo/u-boot/omap4/include/configs/neweraadbes2.h
+      #define CONFIG_NEWERAADBES2	1    /* Build for ES2 ADB variant */
+      
+in uboot source code 
+  #if defined(CONFIG_NEWERAADBES2)      
+       add target hardware dependence code. 
+     
+     
+Bring up. 
+
+   init program directly mounts all filesystems and devices       
+   
+   
+Android Init Language   
+    * Actionn 
+    * Commands
+    * Services
+    * Options
+    *  Actionn: on <trigger>   <command>  <command>  <command>
+    * Services:  service <name> <pathname> [ <argument> ]*    <option>   <option>
+    * Options
+    
+Display Drivers
