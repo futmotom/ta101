@@ -1,7 +1,7 @@
 /*
  * (C) Copyright 2010
  * Wolfgang Denk, DENX Software Engineering, wd@denx.de.
- *
+ * hello 
  * See file CREDITS for list of people who contributed to this
  * project.
  *
