@@ -2,7 +2,7 @@
 
 # Script to create header files and links to configure
 # X-Loader for a specific board.
-#
+# this is a test
 # Parameters:  Target  Architecture  CPU  Board
 #
 # (C) 2004 Texas Instruments
